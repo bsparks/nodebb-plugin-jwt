@@ -1,10 +1,8 @@
 (function (module) {
     "use strict";
 
-    var User = module.parent.require('./user'),
-        meta = module.parent.require('./meta'),
-        jwt = module.parent.require('jsonwebtoken'),
-        _ = module.parent.require('lodash');
+    var jwt = require('jsonwebtoken'),
+        _ = require('lodash');
 
     var constants = Object.freeze({
         'name': "JWT",
@@ -25,7 +23,9 @@
         data.router.get('/api/admin/plugins/jwt', render);
 
         function getToken(req, res, next) {
-            var token = jwt.sign(_.omit(req.user, 'password'), 'foo', { expiresInMinutes: 60*5 });
+            var token = jwt.sign(_.omit(req.user, 'password'), 'foo', {
+                expiresInMinutes: 60 * 5
+            });
 
             req.send(token);
         }
@@ -46,4 +46,5 @@
     };
 
     module.exports = JWT;
+
 }(module));
