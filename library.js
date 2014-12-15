@@ -9,7 +9,7 @@
         'name': "JWT",
         'admin': {
             'route': '/plugins/jwt',
-            'icon': 'fa-file-archive'
+            'icon': 'fa-file-archive-o'
         }
     });
 
