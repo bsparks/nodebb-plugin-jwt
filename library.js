@@ -3,7 +3,8 @@
 
     var User = module.parent.require('./user'),
         meta = module.parent.require('./meta'),
-        jwt = module.parent.require('jsonwebtoken');
+        jwt = module.parent.require('jsonwebtoken'),
+        _ = module.parent.require('lodash');
 
     var constants = Object.freeze({
         'name': "JWT",
