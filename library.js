@@ -11,18 +11,16 @@
 
     var JWT = {};
 
-    JWT.init = function (data, callback) {
-        console.log('JWT DATA: ', data);
+    JWT.init = function (router, middleware, controllers, callback) {
         var jwt = require('jsonwebtoken'),
-            _ = require('lodash'),
-            middleware = data.middleware;
+            _ = require('lodash');
 
         function render(req, res, next) {
             res.render('admin/plugins/jwt', {});
         }
 
-        data.router.get('/admin/plugins/jwt', middleware.admin.buildHeader, render);
-        data.router.get('/api/admin/plugins/jwt', render);
+        router.get('/admin/plugins/jwt', middleware.admin.buildHeader, render);
+        router.get('/api/admin/plugins/jwt', render);
 
         function getToken(req, res, next) {
             if (req.user && req.user.uid) {
@@ -37,7 +35,7 @@
             }
         }
 
-        data.router.get('/api/jwt', getToken);
+        router.get('/api/jwt', getToken);
 
         callback();
     };
