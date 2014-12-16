@@ -1,6 +1,9 @@
 (function (module) {
     "use strict";
 
+    var meta = module.parent.require('./meta'),
+        user = module.parent.require('./user');
+
     var constants = Object.freeze({
         'name': "JWT",
         'admin': {
@@ -23,13 +26,19 @@
         router.get('/api/admin/plugins/jwt', render);
 
         function getToken(req, res, next) {
-            if (req.user && req.user.uid) {
-                // TODO: use meta for secret
-                var token = jwt.sign(_.omit(req.user, 'password'), 'foo', {
-                    expiresInMinutes: 60 * 5
-                });
 
-                res.send(token);
+            if (req.user && req.user.uid) {
+                // TODO: prune data? support more sites?
+                meta.settings.get('jwt', function (err, settings) {
+                    user.getUserData(req.user.uid, function (err, user) {
+
+                        var token = jwt.sign(_.omit(user, 'password'), settings.secret, {
+                            expiresInMinutes: 60 * 5
+                        });
+
+                        res.send(token);
+                    });
+                });
             } else {
                 res.redirect('/login');
             }
@@ -41,7 +50,7 @@
     };
 
     JWT.addMenuItem = function (custom_header, callback) {
-        custom_header.authentication.push({
+        custom_header.plugins.push({
             "route": constants.admin.route,
             "icon": constants.admin.icon,
             "name": constants.name

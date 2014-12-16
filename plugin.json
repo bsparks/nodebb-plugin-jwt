@@ -1,7 +1,7 @@
 {
     "id": "nodebb-plugin-jwt",
     "name": "NodeBB JWT Generator",
-    "description": "NodeBB Plugin that generates JWT tokens for shared apps. (WIP)",
+    "description": "NodeBB Plugin that generates JWT tokens for shared apps.",
     "url": "https://github.com/bsparks/nodebb-plugin-jwt",
     "library": "./library.js",
     "templates": "./templates",
