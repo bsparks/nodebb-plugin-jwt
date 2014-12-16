@@ -29,7 +29,7 @@
                     expiresInMinutes: 60 * 5
                 });
 
-                req.send(token);
+                res.send(token);
             } else {
                 res.redirect('/login');
             }
