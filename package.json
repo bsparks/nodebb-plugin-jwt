@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-jwt",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "plugin for NodeBB to generate JWT",
   "main": "library.js",
   "scripts": {

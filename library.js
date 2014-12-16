@@ -12,14 +12,16 @@
     var JWT = {};
 
     JWT.init = function (data, callback) {
+        console.log('JWT DATA: ', data);
         var jwt = require('jsonwebtoken'),
-            _ = require('lodash');
+            _ = require('lodash'),
+            middleware = data.middleware;
 
         function render(req, res, next) {
             res.render('admin/plugins/jwt', {});
         }
 
-        data.router.get('/admin/plugins/jwt', data.middleware.admin.buildHeader, render);
+        data.router.get('/admin/plugins/jwt', middleware.admin.buildHeader, render);
         data.router.get('/api/admin/plugins/jwt', render);
 
         function getToken(req, res, next) {
