@@ -2,7 +2,7 @@
 <hr />
 
 <form class="jwt">
-    <div class="alert alert-warning">
+    <div class="form-group">
         <p>
             Enter your application shared secret details here.
         </p>
@@ -14,11 +14,3 @@
     </div>
 </form>
 <button class="btn btn-lg btn-primary" type="button" id="save">Save</button>
-<script>
-    require(['settings'], function(Settings) {
-        Settings.load('jwt', $('.jwt'));
-        $('#save').on('click', function() {
-            Settings.save('jwt', $('.jwt'));
-        });
-    });
-</script>

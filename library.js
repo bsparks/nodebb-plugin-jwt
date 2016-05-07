@@ -2,7 +2,9 @@
     "use strict";
 
     var meta = module.parent.require('./meta'),
-        user = module.parent.require('./user');
+        user = module.parent.require('./user'),
+        controllers = require('./lib/controllers'),
+        nconf = require("nconf");
 
     var constants = Object.freeze({
         'name': "JWT",
@@ -14,26 +16,26 @@
 
     var JWT = {};
 
-    JWT.init = function (router, middleware, controllers, callback) {
+    JWT.init = function (params, callback) {
         var jwt = require('jsonwebtoken'),
-            _ = require('lodash');
+            _ = require('lodash'),
+            router = params.router,
+            hostMiddleware = params.middleware,
+            hostControllers = params.controllers,
+            url=nconf.get("url");
 
-        function render(req, res, next) {
-            res.render('admin/plugins/jwt', {});
-        }
-
-        router.get('/admin/plugins/jwt', middleware.admin.buildHeader, render);
-        router.get('/api/admin/plugins/jwt', render);
-
+        router.get('/admin/plugins/jwt', hostMiddleware.admin.buildHeader, controllers.renderAdminPage);
+        router.get('/api/admin/plugins/jwt', controllers.renderAdminPage);
+        
         function getToken(req, res, next) {
 
             if (req.user && req.user.uid) {
-                // TODO: prune data? support more sites?
+                
                 meta.settings.get('jwt', function (err, settings) {
                     user.getUserData(req.user.uid, function (err, user) {
-
+                        user._uid=user.uid;
                         var token = jwt.sign(_.omit(user, 'password'), settings.secret, {
-                            expiresInMinutes: 60 * 5
+                            expiresIn: 60 * 5
                         });
 
                         res.send(token);
@@ -46,17 +48,25 @@
 
         router.get('/api/jwt', getToken);
 
+        JWT.reloadSettings();
+
         callback();
     };
 
-    JWT.addMenuItem = function (custom_header, callback) {
-        custom_header.plugins.push({
+    JWT.addAdminNavigation = function (header, callback) {
+        header.plugins.push({
             "route": constants.admin.route,
             "icon": constants.admin.icon,
             "name": constants.name
         });
 
-        callback(null, custom_header);
+        callback(null, header);
+    };
+
+    JWT.reloadSettings=function(){
+        meta.settings.get('jwt', function(err, settings) {
+            JWT.settings = settings;
+        });
     };
 
     module.exports = JWT;

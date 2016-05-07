@@ -4,9 +4,16 @@
     "description": "NodeBB Plugin that generates JWT tokens for shared apps.",
     "url": "https://github.com/bsparks/nodebb-plugin-jwt",
     "library": "./library.js",
-    "templates": "./templates",
+    "templates": "templates",
     "hooks": [
         { "hook": "static:app.load", "method": "init" },
-        { "hook": "filter:admin.header.build", "method": "addMenuItem" }
+        { "hook": "filter:admin.header.build", "method": "addAdminNavigation" },
+        { "hook": "action:settings.set", "method": "reloadSettings" }
+    ],
+    "less": [
+        "./less/style.less"
+    ],
+    "acpScripts": [
+        "public/js/admin.js"
     ]
 }
